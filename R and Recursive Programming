@@ -1,0 +1,38 @@
+In this article, let’s look into;
+1-Fibonacci — recursive functions with R
+2-Memoization
+3-Time Complexity 
+4- <<- Operator
+
+First fibonacci numbers;
+1 1 2 3 5 8 13 21
+
+As you can see above, there is a recurring aggregation. Million of explanation about Fibonacci can be found online, whereas the functions time complexity is O(N²).
+It is not an effective solution.
+
+fibonacci <- function(n){
+ if(n==1) {return(1)}
+ if(n==0) {return(0)}
+ return(fibonacci(n-1)+fibonacci(n-2))
+}
+
+Memoization should be used to make the function faster.
+
+For example, fibonacci(2) is calculated 3 times. If we keep the fibonacci(2) in an array, fibonacci(2) won’t be calculated each time.
+
+The most important assignment operator for this function is <<- . <<- makes our valuable global, so we can reach and change its value in sub-function. 
+Hypothetically, when we replace <<- with <-, function’s performance will be O(N²) like the first approach.
+
+After the improvement the function’s time complexity is only O(N). It is a huge difference.
+
+fibonacci <- function(n) {
+ if(n == 1 || n == 2) return(1)
+ seq <- integer(n)
+ seq[1:2] <- 1
+ calc <- function(n) {
+ if (seq[n] != 0) return(seq[n])
+ seq[n] <<- calc(n-1) + calc(n-2)
+ seq[n]
+ }
+ calc(n)
+}
