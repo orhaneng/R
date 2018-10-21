@@ -1,0 +1,108 @@
+---
+title: "Assignment#2"
+author: "Omer Orhan"
+date: "8 Ekim 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#Question1:Write a program to find the outliers using Box and Whisker�s criterion discussed in the class
+
+
+BoxAndwhisker<-function(x){
+
+  x1 <- (summary(x)[2] - (1.5 * IQR(x)) )
+  x3 <- (summary(x)[5] + (1.5 * IQR(x)) )
+  return(subset(x, x <= x1|x >= x3))
+}
+x<-c(0.5,3,5,8,10,100,180)
+print(BoxAndwhisker(x))
+
+```
+
+```{r}
+#QUESTION2:Make two vectors: X<-c(1,2,5,10,12) Y<-c(2,5,1,0,12)
+X<-c(1,2,5,10,12)
+Y<-c(2,5,1,0,12)
+#a.Find the values that are contained in both X and Y
+intersect(X,Y)
+#b.Find values that are in x but not in y and (vice versa)
+setdiff(X,Y)
+setdiff(Y,X)
+#c.Construct a vector that contains all values contained in either X or Y,and compare this vector to c(X,Y)
+ a <- union(X,Y)
+ a
+ a %in% c(X,Y) 
+```
+
+
+```{r}
+#Load USArrests data set.
+#Question3:Which states has most and least assault, murder, and rape arrests.
+x <- USArrests
+#max Murder;
+row.names(x)[which.max(x$Murder)]
+#max Assault;
+row.names(x)[which.max(x$Assault)]
+#max Rape
+row.names(x)[which.max(x$Rape)]
+#min Murder
+row.names(x)[which.min(x$Murder)]
+#min Assault
+row.names(x)[which.min(x$Assault)]
+#min Rape
+row.names(x)[which.min(x$Rape)]
+```
+
+```{r}
+#Question4:Which states are in the bottom 25% of murder and in the top 25% of the murder.
+#bottom 25% of murder
+bottomQuartileMurderRate <- quantile(USArrests$Murder)[2]
+subset(USArrests, Murder < bottomQuartileMurderRate, select= c(Murder))
+#top 25% of murder
+topQuartileMurderRate <- quantile(USArrests$Murder)[4]
+subset(USArrests, Murder > topQuartileMurderRate, select= c( Murder))
+
+```
+```{r}
+#QUESTION5 
+# The following function calculates the mean and standard deviation of a numeric vector
+# Fn1<-function(x){
+# Mean1<- mena(x)
+# Sd1<-sd(x)
+# return(mean = mean1, sd = sd1)
+# }
+# Modify the function so that: 
+
+#Fn1<-function(x){
+#  Mean1<- mean(x)
+#  Sd1<-sd(x)
+#  return(output<-list("sd:"=Sd1,"mean="=Mean1))
+#}
+#x <- c(1,3,6,8,9)
+#print(Fn1(x))
+
+#   (a) the default is to use rnorm to generate 30 random normal numbers, and return the standard deviation, 
+Fn1<-function(X=rnorm(30)){
+  sd(X)
+  return(sd(X))
+}
+print(Fn1())
+
+# (b) if there are missing values, the mean and standard deviation are calculated for the remaining values.
+
+Fn1<-function(x){
+  if(any(is.na(x))){
+    x <- na.omit(x)
+  }
+  Mean1<- mean(x)
+  Sd1<-sd(x)
+  return(output<-list("sd:"=Sd1,"mean="=Mean1))
+}
+x <- c(1,NA,6,8,9)
+print(Fn1(x))
+```
