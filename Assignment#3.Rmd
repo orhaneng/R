@@ -1,0 +1,83 @@
+---
+title: "Assignment#3"
+author: "Omer Orhan"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+
+# In this homework, you will do some data analysis using R
+# for the Forest Fire Data described
+# https://archive.ics.uci.edu/ml/datasets/forest+fires
+# The dataset is used to find the relationship between the
+# burned area of forest fires and meteorological data.
+```
+```{r}
+# 1. Import the data into R.
+ff <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv", header = TRUE, sep = ",",
+stringsAsFactors= FALSE)
+# a. How many observations are there in the dataset?
+nrow(ff)
+# b. How many observations are there with a fire (i.e.,
+# area>0)
+nrow(ff[ff$area >0,])
+# c. How many observations are there with a rain
+# (i.e., rain>0)
+nrow(ff[ff$rain >0,])
+# d. How many observations are there with both a fire
+# and a rain?
+nrow(ff[ff$rain >0 & ff$area >0  ,])
+
+
+```
+```{r}
+# 2. Show the columns month, day, area of the all the
+#observations.
+library(dplyr)
+#Since I wanted to keep output short,I used "Head".
+head(select(ff,month,day,area))
+```
+
+```{r}
+#3. Show the columns month, day, area of the
+#observations with a fire.
+#Since I wanted to keep output short,I used "Head".
+head(subset(ff,area>0.00,select = c(month,day,area)))
+```
+```{r}
+# 4. How large are the five largest fires (i.e., having largest
+# area)
+sort(ff$area, decreasing = TRUE)[1:5]
+# a. What are the corresponding month, temp, RH,
+# wind, rain area?
+subset(ff,area %in% sort(ff$area, decreasing = TRUE)[1:5],select=c(month, temp, RH
+,wind, rain, area))
+# b. Add one column to the data indicating whether a
+# fire occurred for each observation (True for area
+# >0 and False for area ==0)
+ff <- mutate(ff,newcolumn=area>0)
+str(ff)
+```
+
+```{r}
+# 5. Construct a matrix with 10 columns and 10 rows,
+# filled with random numbers between 0 and 1. Apply
+# two different methods.
+mat <- matrix(runif(100,min=0, max=1),10,10)
+# a. Calculate the row means of this matrix.
+rowMeans(as.matrix(mat))
+# b. Remake the above matrix, with 100 columns, and
+# 10 rows. Then calculate the column means.
+mat <- matrix(runif(100,min=0, max=1),10,100)
+colMeans(as.matrix(mat))
+```
+
+
+
+
+
+
+
