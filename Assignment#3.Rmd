@@ -1,6 +1,5 @@
 ---
 title: "Assignment#3"
-author: "Omer Orhan"
 output: html_document
 ---
 
