@@ -1,0 +1,116 @@
+---
+title: "Assignment#4"
+author: "Omer Orhan"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#Load worldrecord.csv and answer the
+#following?
+  
+library(dplyr)
+
+dataset <- read.csv("c:/WorldRecords.csv", header = TRUE, sep = ",",
+stringsAsFactors= FALSE)
+
+attach(dataset)
+
+```
+```{r}
+# 1. How many different types of events (e.g.
+# “Mens 100m”, “Womens shotput” etc) are
+# represented in the dataset
+unique(dataset$Event)
+length(unique(dataset$Event))
+```
+
+```{r}
+# 2. In what year did Usain Bolt first break the
+# world record for the Men’s 100m?
+min(subset(dataset, Athlete=="Usain Bolt", select = Year ))
+```
+```{r}
+# 3. Which variable tells us the record setting time
+# or distance? The variable name in the data set
+# is? 
+head(dataset$Event)
+head(dataset$Record)
+#What type of the variable is this?
+class(dataset$Event)
+class(dataset$Record)
+#chr
+```
+```{r}
+# 4. Create a subset of the dataset that contains
+# only the world record cases for men’s shotput
+# and women’s shotput
+subset(dataset, Event=="Mens Shotput" | Event=="Womens Shotput" )
+
+```
+```{r}
+# 5. Create a scatter plot of the year and record
+# shotput distance one for men and one for
+# women.
+
+pl <- subset(dataset, Event=="Mens Shotput" & Type=="distance", select= c(Year,Record))
+plot(pl)
+pl <- subset(dataset, Event=="Womens Shotput" & Type=="distance", select= c(Year,Record))
+plot(pl)
+```
+
+```{r}
+# 6. Find the average/mean time for each event.
+# How many athletes have time more than
+# average in each event.
+meanData <-aggregate(cbind(mean = Record) ~ Event, 
+          data = dataset, 
+          FUN = function(x){mean(x)})
+meanData
+
+count = 0
+for (event in meanData[,1]){
+count = count + nrow(subset(dataset, Record>as.numeric(subset(meanData, Event==event, select=c(mean)))& Event==event,select = c(Event)))
+}
+print(count)
+```
+
+```{r}
+# 7. Select the athlete who took most time in men’s
+# 100m and women’s event.
+DD <- subset(dataset, (Event=="Mens 100m" | Event=="Womens 100m"), select = c(Record,Athlete))
+DD <- DD[order(DD$Record, decreasing = TRUE),]
+DD[1:1,]
+```
+
+```{r}
+# 8. Which country won maximum times of men’s
+# 100m event?
+library(dplyr)
+cc <- subset(dataset, Event=="Mens 100m", select = c(Nationality))
+cc <- count(cc, Nationality)
+colnames(cc)=c("Nationality", "Count")
+subset(cc, Count==max(cc$Count),select = c(Nationality))
+
+#
+
+```
+
+```{r}
+#9. How many athletes are there in each event?
+xx <- count(dataset,Event)
+xx
+```
+
+```{r}
+#10. Which country has maximum wins?
+library(dplyr)
+cc <- count(dataset, Nationality)
+colnames(cc)=c("Nationality", "Count")
+subset(cc, Count==max(cc$Count),select = c(Nationality))
+
+```
+
