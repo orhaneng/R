@@ -22,7 +22,7 @@ attach(dataset)
 ```
 ```{r}
 # 1. How many different types of events (e.g.
-# “Mens 100m”, “Womens shotput” etc) are
+# â€œMens 100mâ€, â€œWomens shotputâ€ etc) are
 # represented in the dataset
 unique(dataset$Event)
 length(unique(dataset$Event))
@@ -30,7 +30,7 @@ length(unique(dataset$Event))
 
 ```{r}
 # 2. In what year did Usain Bolt first break the
-# world record for the Men’s 100m?
+# world record for the Menâ€™s 100m?
 min(subset(dataset, Athlete=="Usain Bolt", select = Year ))
 ```
 ```{r}
@@ -46,8 +46,8 @@ class(dataset$Record)
 ```
 ```{r}
 # 4. Create a subset of the dataset that contains
-# only the world record cases for men’s shotput
-# and women’s shotput
+# only the world record cases for menâ€™s shotput
+# and womenâ€™s shotput
 subset(dataset, Event=="Mens Shotput" | Event=="Womens Shotput" )
 
 ```
@@ -79,15 +79,15 @@ print(count)
 ```
 
 ```{r}
-# 7. Select the athlete who took most time in men’s
-# 100m and women’s event.
+# 7. Select the athlete who took most time in menâ€™s
+# 100m and womenâ€™s event.
 DD <- subset(dataset, (Event=="Mens 100m" | Event=="Womens 100m"), select = c(Record,Athlete))
 DD <- DD[order(DD$Record, decreasing = TRUE),]
 DD[1:1,]
 ```
 
 ```{r}
-# 8. Which country won maximum times of men’s
+# 8. Which country won maximum times of menâ€™s
 # 100m event?
 library(dplyr)
 cc <- subset(dataset, Event=="Mens 100m", select = c(Nationality))
