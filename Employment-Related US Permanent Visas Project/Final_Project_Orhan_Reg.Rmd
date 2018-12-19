@@ -1,0 +1,75 @@
+---
+title: "Final_Project_Orhan_Reg"
+author: "Omer Orhan"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+dataset <- read.csv("c:/us_perm_visas.csv", header = TRUE, sep = ",",
+stringsAsFactors= FALSE)
+#Lets see sample data for the the dataset by running below command which selects every 5th row starting from 1st row.
+
+wages <- subset(dataset, wage_offered_unit_of_pay_9089=="Year" & (job_info_work_state =="CALIFORNIA" | job_info_work_state =="TEXAS")& ( us_economic_sector=="IT" | us_economic_sector=="Finance"), select=c(wage_offered_from_9089,job_info_work_state,us_economic_sector))
+ wages[wages==""] <- NA
+wages <- na.omit(wages)
+wages$wage_offered_from_9089 <- as.numeric(gsub(",", "", wages$wage_offered_from_9089))
+
+
+```
+
+```{r}
+wages[, 'job_info_work_state'] <- as.factor(wages[, 'job_info_work_state'])
+par(mfrow=c(1,2))
+plot(wages$wage_offered_from_9089 ~ wages$job_info_work_state,xlab="State",ylab="Wage", title="State&Wage")
+wages <- wages[-which(wages$wage_offered_from_9089 %in% boxplot.stats(wages$wage_offered_from_9089)$out), ]
+plot(wages$wage_offered_from_9089 ~ wages$job_info_work_state,xlab="State",ylab="Wage", title="Boxpot - State&Wage")
+```
+
+```{r}
+
+wages[, 'us_economic_sector'] <- as.factor(wages[, 'us_economic_sector'])
+par(mfrow=c(1,2))
+plot(wages$wage_offered_from_9089 ~ wages$us_economic_sector,xlab="Sectors",ylab="Years", title="Years&Sector")
+wages <- wages[-which(wages$wage_offered_from_9089 %in% boxplot.stats(wages$wage_offered_from_9089)$out), ]
+plot(wages$wage_offered_from_9089 ~ wages$us_economic_sector,xlab="Sectors",ylab="Years", title="Years&Sector-Boxplot")
+
+```
+
+
+```{r}
+wageYrs <- dataset[,c("job_info_alt_cmb_ed_oth_yrs","wage_offer_to_9089")]
+wageYrs[wageYrs==""] <- NA
+wageYrs <- na.omit(wageYrs)
+wageYrs$wage_offer_to_9089 <- as.numeric(gsub(",", "", wageYrs$wage_offer_to_9089))
+#plot(wageYrs$wage_offer_to_9089 ~ wageYrs$job_info_alt_cmb_ed_oth_yrs,xlab="Experience Years",ylab="Wages" )
+wageYrs <- wageYrs[-which(wageYrs$wage_offer_to_9089 %in% boxplot.stats(wageYrs$wage_offer_to_9089)$out), ]
+
+wageYrs.model <- lm(wage_offer_to_9089 ~ job_info_alt_cmb_ed_oth_yrs, data=wageYrs)
+#abline(wageYrs.model)
+summary(wageYrs.model)
+
+new.data <- data.frame(job_info_alt_cmb_ed_oth_yrs=c(10,15) )
+predict(wageYrs.model, new.data, interval="confidence")
+
+par(mfrow=c(2,2))
+plot(wageYrs.model)
+#wageYrs <- wageYrs[-which(wageYrs$wage_offer_to_9089 %in% boxplot.stats(wageYrs$wage_offer_to_9089)$out), ] 
+#wageYrs <- wageYrs[-which(wageYrs$job_info_alt_cmb_ed_oth_yrs %in% boxplot.stats(wageYrs$job_info_alt_cmb_ed_oth_yrs)$out), ]
+#plot(wageYrs$job_info_alt_cmb_ed_oth_yrs ~ wageYrs$wage_offer_to_9089)
+
+
+```
+
+
+
+```
+
+
